@@ -1,0 +1,116 @@
+
+openapi: 3.0.3
+info:
+  title: STD24197
+  description: This is a specification of STD24197
+  version: "1.0.0"
+
+servers:
+  - url: http://localhost:8000
+
+paths:
+  /ping:
+    get:
+      summary: Health Check
+      description: Returns "pong" to check if the API is running.
+      responses:
+        "200":
+          description: Successful response.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "pong"
+
+  /cars:
+    post:
+      summary: Create a list of cars
+      description: Creates and stores a list of car objects in memory.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Car'
+      responses:
+        "201":
+          description: Cars successfully created.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+    get:
+      summary: Get all cars
+      description: Retrieves the list of all car objects stored in memory.
+      responses:
+        "200":
+          description: A list of cars.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+
+  /cars/{id}:
+    get:
+      summary: Get a specific car by ID
+      description: Retrieves a single car object by its identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the car.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A single car object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        "404":
+          description: Car not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Characteristics:
+      type: object
+      properties:
+        max_speed:
+          type: number
+          description: The maximum speed of the car.
+        max_fuel_capacity:
+          type: number
+          description: The maximum fuel capacity of the car.
+    
+    Car:
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: The unique identifier of the car.
+        brand:
+          type: string
+          description: The brand of the car.
+        model:
+          type: string
+          description: The model of the car.
+        characteristics:
+          $ref: '#/components/schemas/Characteristics'
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: A detailed error message.
