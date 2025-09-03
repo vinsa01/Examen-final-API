@@ -46,7 +46,7 @@ def get_all_cars():
     """
     return cars_db
 
-# d. GET /cars/{id}
+# d GET /cars/{id}
 @app.get("/cars/{id}", response_model=Car)
 def get_car_by_id(id: str):
     """
@@ -60,4 +60,5 @@ def get_car_by_id(id: str):
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f"The car with id '{id}' does not exist or was not found."
+
     )
